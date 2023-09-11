@@ -1,0 +1,72 @@
+# shellcheck disable=SC2089,SC2090
+case $0 in
+  -sh|sh)
+    set -o vi
+
+    set -- '$(if [ $? -ne 0 ];then echo "x ";fi)'
+    PS1="$*"
+    PS1=$PS1'$(logname)@$(uname -n): '
+    set -- '$(pwd|sed '\''s@'\''$HOME'\''@~@'\'') |$ $()'
+    PS1=$PS1$*
+  ;;
+esac
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# jenv
+if command -v jenv > /dev/null ; then
+  export PATH="$HOME/.jenv/bin:$PATH"
+  eval "$(jenv init -)"
+fi
+
+# .Net
+if [ -d ~/.dotnet/tools ]; then
+  export PATH="$HOME/.dotnet/tools:$PATH"
+fi
+
+# cargo
+[ -x $HOME/.cargo/env ] && . $HOME/.cargo/env
+
+use_proxy() {
+  export https_proxy=http://127.0.0.1:7890;
+  export http_proxy=http://127.0.0.1:7890;
+  export all_proxy=socks5://127.0.0.1:7890;
+}
+
+unuse_proxy() {
+  unset http_proxy;
+  unset https_proxy;
+  unset all_proxy;
+}
+
+# cmake
+if command -v ninja > /dev/null ; then
+  export CMAKE_GENERATOR=Ninja
+fi
+export CMAKE_CONFIG_TYPE=MinSizeRel
+export CMAKE_BUILD_TYPE=MinSizeRel
+export CMAKE_CONFIGURATION_TYPES=MinSizeRel
+
+case $(uname) in
+  Darwin)
+    export HOMEBREW_NO_INSTALL_FROM_API=1
+    if command -v brew > /dev/null ; then
+      eval $(brew shellenv)
+      DEFAULT_PREFIX=$HOMEBREW_PREFIX
+    fi
+    ;;
+  Linux)
+    DEFAULT_PREFIX=/usr
+    ;;
+esac
+
+if test -d $DEFAULT_PREFIX/etc/profile.d/; then
+  for profile in $DEFAULT_PREFIX/etc/profile.d/*.sh; do
+    test -r "$profile" && . "$profile"
+  done
+  unset profile
+fi
+
+# perl
+eval "$(perl -I$HOME/.local/share/perl5/lib/perl5 -Mlocal::lib=$HOME/.local/share/perl5)"
