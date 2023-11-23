@@ -70,3 +70,9 @@ fi
 
 # perl
 eval "$(perl -I$HOME/.local/share/perl5/lib/perl5 -Mlocal::lib=$HOME/.local/share/perl5)"
+
+# opam
+if command -v opam > /dev/null ; then
+  eval $(opam env)
+fi
+
