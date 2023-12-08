@@ -1,6 +1,6 @@
 [user]
 	name = PaperChalice
-	email = 29250197+paperchalice@users.noreply.github.com
+	email = liujunchang97@outlook.com
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
