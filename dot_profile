@@ -76,6 +76,6 @@ if command -v opam > /dev/null ; then
   eval $(opam env)
 fi
 
-if command -v zoxide
+if command -v zoxide > /dev/null ; then
   eval "$(zoxide init posix --hook prompt)"
 fi
