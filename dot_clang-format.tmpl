@@ -1,7 +1,10 @@
 {{ if eq .chezmoi.os "darwin" -}}
 BasedOnStyle: LLVM
+
 {{ else if eq .chezmoi.os "linux" }}
 BasedOnStyle: Google
+
 {{- else if eq .chezmoi.os "windows" -}}
 BasedOnStyle:  Microsoft
+
 {{ end -}}
