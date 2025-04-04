@@ -3,5 +3,5 @@
 if [ ! -f "~/.config/chezmoi/key.txt" ]; then
     mkdir -p "~/.config/chezmoi"
     chezmoi age decrypt --output "~/.config/chezmoi/key.txt" --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
-    chmod 600 "~/.config/chezmoi/key.txt"
+    chmod 600 "${HOME}/.config/chezmoi/key.txt"
 fi
