@@ -1,8 +1,9 @@
 key.txt.age
 {{ if ne .chezmoi.os "windows" }}
 Documents\PowerShell\Microsoft.PowerShell_profile.ps
+run_once_before_decrypt-private-key.ps1
 {{ else }}
 .config/powershell/Microsoft.PowerShell_profile.ps1
 .profile
-run_once_before_decrypt-private-key.sh.tmpl
+run_once_before_decrypt-private-key.sh
 {{ end }}
