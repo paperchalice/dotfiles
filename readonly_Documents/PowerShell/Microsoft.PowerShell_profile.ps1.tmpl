@@ -1,0 +1,27 @@
+
+{{- if eq .chezmoi.os "windows" -}}
+#f45873b3-b655-43a6-b217-97c00aa0db58 PowerToys CommandNotFound module
+
+Import-Module -Name Microsoft.WinGet.CommandNotFound
+#f45873b3-b655-43a6-b217-97c00aa0db58
+
+#region conda initialize
+# !! Contents within this block are managed by 'conda init' !!
+If (Test-Path "$Env:USERPROFILE\miniforge3\Scripts\conda.exe") {
+    (& "$Env:USERPROFILE\miniforge3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ? { $_ } | Invoke-Expression
+}
+#endregion
+
+$OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+
+$vswhere_exe = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+if (Test-Path $vswhere_exe) {
+    $vs_info = & $vswhere_exe -format json -latest -utf8 | ConvertFrom-Json
+    Import-Module "$($vs_info.installationPath)\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+    function Enter-DevShell {
+        Enter-VsDevShell $vs_info.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
+    }
+    Remove-Variable vs_info
+}
+Remove-Variable vswhere_exe
+{{ end }}
