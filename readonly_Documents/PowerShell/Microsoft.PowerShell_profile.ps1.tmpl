@@ -10,6 +10,10 @@ Import-Module -Name Microsoft.WinGet.CommandNotFound
 If (Test-Path "$Env:USERPROFILE\miniforge3\Scripts\conda.exe") {
     (& "$Env:USERPROFILE\miniforge3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ? { $_ } | Invoke-Expression
 }
+
+If (Test-Path "$Env:USERPROFILE\miniforge3\envs\prefix") {
+    conda activate prefix
+}
 #endregion
 
 $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
