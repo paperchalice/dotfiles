@@ -28,4 +28,8 @@ if (Test-Path $vswhere_exe) {
     Remove-Variable vs_info
 }
 Remove-Variable vswhere_exe
+
+If (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    oh-my-posh init pwsh | Invoke-Expression
+}
 {{ end }}
