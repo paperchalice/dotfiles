@@ -21,8 +21,10 @@ $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Obj
 $vswhere_exe = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 if (Test-Path $vswhere_exe) {
     $vs_info = & $vswhere_exe -format json -latest -utf8 | ConvertFrom-Json
-    Import-Module "$($vs_info.installationPath)\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
     function Enter-DevShell {
+        $vswhere_exe = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        $vs_info = & $vswhere_exe -format json -latest -utf8 | ConvertFrom-Json
+        Import-Module "$($vs_info.installationPath)\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
         Enter-VsDevShell $vs_info.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
     }
     Remove-Variable vs_info
