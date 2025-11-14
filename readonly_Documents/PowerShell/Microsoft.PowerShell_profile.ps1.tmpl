@@ -18,20 +18,25 @@ If (Test-Path "$Env:USERPROFILE\miniforge3\envs\prefix") {
 
 $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
 
+#region VS helper
 $vswhere_exe = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 if (Test-Path $vswhere_exe) {
-    $vs_info = & $vswhere_exe -format json -latest -utf8 | ConvertFrom-Json
     function Enter-DevShell {
-        $vswhere_exe = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-        $vs_info = & $vswhere_exe -format json -latest -utf8 | ConvertFrom-Json
-        Import-Module "$($vs_info.installationPath)\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-        Enter-VsDevShell $vs_info.instanceId -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
+        $vswhere = "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+        $vsInfo = & $vswhere -format json -latest -utf8 | ConvertFrom-Json
+        $command = [scriptblock]::Create(@"
+            Import-Module "$($vsInfo.installationPath)\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+            Enter-VsDevShell $($vsInfo.instanceId) -SkipAutomaticLocation -DevCmdArguments "-arch=x64 -host_arch=x64"
+"@)
+        pwsh -NoExit -NoLogo -Command $command
     }
-    Remove-Variable vs_info
 }
 Remove-Variable vswhere_exe
+#endregion
 
+# region oh-my-posh initialize
 If (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     oh-my-posh init pwsh | Invoke-Expression
 }
+#endregion
 {{ end }}
