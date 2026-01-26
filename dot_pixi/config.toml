@@ -1,0 +1,4 @@
+[proxy-config]
+http = "http://localhost:12334/"
+https = "http://localhost:12334/"
+non-proxy-hosts = [".cn", "localhost", "[::1]"]
