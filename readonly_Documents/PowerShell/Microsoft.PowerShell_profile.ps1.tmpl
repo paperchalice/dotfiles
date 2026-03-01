@@ -7,12 +7,12 @@ Import-Module -Name Microsoft.WinGet.CommandNotFound
 
 #region conda initialize
 # !! Contents within this block are managed by 'conda init' !!
-If (Test-Path "$Env:USERPROFILE\miniforge3\Scripts\conda.exe") {
-    (& "$Env:USERPROFILE\miniforge3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ? { $_ } | Invoke-Expression
+If (Test-Path "$Env:USERPROFILE\miniforge3\Library\bin\mamba.exe") {
+    (& "$Env:USERPROFILE\miniforge3\Library\bin\mamba.exe" "shell" "hook" "--shell" "powershell") | Out-String | ? { $_ } | Invoke-Expression
 }
 
 If (Test-Path "$Env:USERPROFILE\miniforge3\envs\prefix") {
-    conda activate prefix
+    mamba activate prefix
 }
 #endregion
 
